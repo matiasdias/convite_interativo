@@ -10,38 +10,39 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
         }
 
         /* Estilo do corpo */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f0f8ff;
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            min-height: 100vh;
             padding: 20px;
         }
 
         /* Estilo do título */
         h1 {
             font-size: 2.5em;
-            color: #4CAF50;
+            color: #6a1b9a;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 21px;
+            animation: fadeIn 1s ease-in;
         }
 
         /* Estilo do formulário */
         #conviteForm {
-            background-color: #fff;
+            background-color: #ffffff;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             width: 100%;
             max-width: 400px;
             text-align: center;
+            animation: slideIn 1s ease-out;
         }
 
         label {
@@ -54,11 +55,14 @@
         /* Estilo das opções de resposta */
         input[type="radio"] {
             margin: 10px 0;
-            accent-color: #4CAF50;
+            accent-color: #6a1b9a;
+            transform: scale(1.2);
+            cursor: pointer;
         }
 
+        /* Estilo do botão de envio */
         input[type="submit"] {
-            background-color: #4CAF50;
+            background-color: #6a1b9a;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -66,10 +70,12 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            margin-top: 20px;
+            font-weight: bold;
         }
 
         input[type="submit"]:hover {
-            background-color: #45a049;
+            background-color: #8e24aa;
         }
 
         /* Mensagens de alerta */
@@ -79,6 +85,7 @@
             text-align: center;
             margin-top: 20px;
             font-weight: bold;
+            display: none;
         }
 
         .sucesso {
@@ -89,43 +96,64 @@
             font-weight: bold;
             display: none;
         }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsividade */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2em;
+            }
+            #conviteForm {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Boa tarde, senhorita Nayane!</h1>
-    <form id="conviteForm" onsubmit="return verificarResposta(event)">
-        <label><b>O que você acha de sair hoje à noite para tomarmos um açaí, comer um hambúrguer, pizza, ou sanduíche?</b></label><br>
-        <input type="radio" name="resposta" value="sim"> Opção 1: Sim<br>
-        <input type="radio" name="resposta" value="opcao1"> Opção 2: Opção 1<br><br>
+    <h1>Olá, senhorita Nayane!</h1>
+    <form id="conviteForm" onsubmit="verificarResposta(event)">
+        <label><b>O que você acha de sair à noite para tomarmos um açaí, comer um hambúrguer, pizza, ou sanduíche?</b></label><br>
+        <input type="radio" name="resposta" value="sim"> Sim<br>
+        <input type="radio" name="resposta" value="opcao1"> Opção 1<br><br>
         <input type="submit" value="Próxima">
     </form>
 
-    <!-- Mensagem de Alerta -->
-    <div id="mensagem" class="alerta" style="display: none;"></div>
-    <div id="mensagemSucesso" class="sucesso"></div>
+    <!-- Div para exibir a mensagem do backend -->
+    <div id="mensagem" class="alerta"></div>
 
     <script>
-        // Função para verificar a resposta antes do envio
+        // Função para enviar o formulário via AJAX e exibir a mensagem do backend
         function verificarResposta(event) {
-            const resposta = document.querySelector('input[name="resposta"]:checked');
-            const mensagem = document.getElementById('mensagem');
-            const mensagemSucesso = document.getElementById('mensagemSucesso');
-
-            // Impede o envio do formulário
             event.preventDefault();
 
-            if (!resposta) {
-                // Exibe a mensagem de alerta se nenhuma opção for selecionada
-                mensagem.style.display = 'block';
-                mensagem.innerHTML = "Se você não marcar uma opção, vou aí pessoalmente e fazer você morrer de rir com cosquinhas😁!";
-                mensagemSucesso.style.display = 'none';
-            } else {
-                // Exibe a mensagem de sucesso se uma opção for selecionada
-                mensagemSucesso.style.display = 'block';
-                mensagemSucesso.innerHTML = "YES! 🎉 Vamos marcar então um horário!";
-                mensagem.style.display = 'none';
-            }
+            const form = document.getElementById('conviteForm');
+            const formData = new FormData(form);
+            const mensagemDiv = document.getElementById('mensagem');
+
+            fetch('/responder', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                mensagemDiv.style.display = 'block';
+                mensagemDiv.innerHTML = data;
+                mensagemDiv.className = data.includes("Se você") ? "alerta" : "sucesso";
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+            });
         }
     </script>
 

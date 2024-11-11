@@ -10,12 +10,12 @@ def index():
 def responder():
     resposta = request.form.get('resposta')
     if resposta == 'sim':
-        mensagem = "YES! 🎉 Vamos marcar então um horário!"
+        mensagem = "Yes! 🎉 Vamos então marcar um dia!"
     elif resposta == 'opcao1':
-        mensagem = "YES! 🎉 Vamos com a Opção 1, então!"
+        mensagem = "Yes! 🎉 Vamos com a Opção 1, então!"
     else:
-        mensagem = "Se você não marcar uma opção, vou aí pessoalmente e te fazer morrer de rir com cosquinhas!"
-    return render_template('index.html', mensagem=mensagem)
+        mensagem = "Se você não marcar nenhuma opção, vou até aí pessoalmente e te fazer morrer de rir com cosquinhas!"
+    return mensagem  # Retorna apenas a mensagem em texto para o AJAX
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(host='0.0.0.0', port=5001)
