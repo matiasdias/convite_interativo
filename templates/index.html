@@ -13,27 +13,84 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* Estilo do corpo */
+        /* Estilo do corpo com fundo de tema princesa */
         body {
-            background-color: #f0f8ff;
+            background: linear-gradient(135deg, #f7e1ff, #e1c9ff);
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            max-width: 1000px;
+            width: 100%;
+            gap: 20px;
+            align-items: center;
         }
 
         /* Estilo do título */
         h1 {
-            font-size: 2.5em;
-            color: #6a1b9a;
+            font-size: 2em;
+            color: #b565d9;
             text-align: center;
-            margin-bottom: 21px;
-            animation: fadeIn 1s ease-in;
+            margin-bottom: 20px;
+            font-family: 'Pacifico', cursive;
         }
 
-        /* Estilo do formulário */
+        /* Estilos para o slider de fotos com tema de princesa */
+        #slider {
+            flex: 1;
+            max-width: 350px;
+            height: 550px;
+            overflow: hidden;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.6s ease; /* Transição suave para a nova posição */
+        }
+
+        .slider-images {
+            display: flex;
+            height: 100%;
+            transition: transform 0.8s ease-in-out;
+            animation: slide 20s infinite;
+        }
+
+        .slider-images img {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(255, 215, 248, 0.5);
+        }
+
+        /* Animação para loop infinito */
+        @keyframes slide {
+            0%, 20% { transform: translateX(0); }
+            25%, 45% { transform: translateX(-100%); }
+            50%, 70% { transform: translateX(-200%); }
+            75%, 95% { transform: translateX(-300%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Classe para reposicionar o slide no canto superior esquerdo */
+        .mini-slide {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 150px; /* Reduz tamanho do slide */
+            height: 250px;
+            z-index: 1000; /* Traz o slide para frente */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Estilos para o formulário com detalhes de princesa */
         #conviteForm {
             background-color: #ffffff;
             padding: 30px;
@@ -43,58 +100,65 @@
             max-width: 400px;
             text-align: center;
             animation: slideIn 1s ease-out;
+            border: 2px solid #e1c9ff;
         }
 
         label {
             font-size: 1.2em;
-            color: #555;
+            color: #b565d9;
             margin-bottom: 15px;
             display: block;
+            font-family: 'Arial', sans-serif;
         }
 
         /* Estilo das opções de resposta */
         input[type="radio"] {
             margin: 10px 0;
-            accent-color: #6a1b9a;
+            accent-color: #b565d9;
             transform: scale(1.2);
             cursor: pointer;
         }
 
         /* Estilo do botão de envio */
         input[type="submit"] {
-            background-color: #6a1b9a;
+            background-color: #b565d9;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 1.1em;
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
             margin-top: 20px;
             font-weight: bold;
+            box-shadow: 0 4px 8px rgba(181, 101, 217, 0.3);
         }
 
         input[type="submit"]:hover {
-            background-color: #8e24aa;
+            background-color: #d08ae6;
         }
 
         /* Mensagens de alerta */
-        .alerta {
+        .alerta, .sucesso {
             font-size: 1.1em;
-            color: #ff6347;
-            text-align: center;
             margin-top: 20px;
             font-weight: bold;
             display: none;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(181, 101, 217, 0.2);
+            animation: fadeIn 0.5s ease;
         }
-
+        .alerta {
+            color: #ffffff;
+            background-color: #e080b5;
+            border: 1px solid #d06ca6;
+        }
         .sucesso {
-            font-size: 1.1em;
-            color: #32CD32;
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
-            display: none;
+            color: #ffffff;
+            background-color: #b565d9;
+            border: 1px solid #a14cc2;
         }
 
         /* Animações */
@@ -102,7 +166,6 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
         @keyframes slideIn {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
@@ -110,27 +173,35 @@
 
         /* Responsividade */
         @media (max-width: 480px) {
-            h1 {
-                font-size: 2em;
-            }
-            #conviteForm {
-                padding: 20px;
-            }
+            h1 { font-size: 1.5em; }
+            #conviteForm { padding: 20px; }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Olá, senhorita Nayane!</h1>
+        <!-- Carrossel de Imagens -->
+        <div id="slider">
+            <div class="slider-images">
+                <img src="{{ url_for('static', filename='images/nayane.jpg') }}" alt="Nayane">
+                <img src="{{ url_for('static', filename='images/nayane2.jpg') }}" alt="Nayane2">
+                <img src="{{ url_for('static', filename='images/nayane3.jpg') }}" alt="Nayane3">
+                <img src="{{ url_for('static', filename='images/nayane4.jpg') }}" alt="Nayane4">
+            </div>
+        </div>
 
-    <h1>Olá, senhorita Nayane!</h1>
-    <form id="conviteForm" onsubmit="verificarResposta(event)">
-        <label><b>O que você acha de sair à noite para tomarmos um açaí, comer um hambúrguer, pizza, ou sanduíche?</b></label><br>
-        <input type="radio" name="resposta" value="sim"> Sim<br>
-        <input type="radio" name="resposta" value="opcao1"> Opção 1<br><br>
-        <input type="submit" value="Próxima">
-    </form>
-
-    <!-- Div para exibir a mensagem do backend -->
-    <div id="mensagem" class="alerta"></div>
+        <!-- Formulário -->
+        <form id="conviteForm" onsubmit="verificarResposta(event)">
+            <label><b>O que você acha de sair à noite para tomarmos um açaí, comer um hambúrguer, pizza, ou sanduíche?</b></label><br>
+            <input type="radio" name="resposta" value="sim"> Sim<br>
+            <input type="radio" name="resposta" value="opcao1"> Opção 1<br><br>
+            <input type="submit" value="Próxima">
+        </form>
+        
+        <!-- Mensagem de Alerta -->
+        <div id="mensagem" class="alerta"></div>
+    </div>
 
     <script>
         // Função para enviar o formulário via AJAX e exibir a mensagem do backend
@@ -140,6 +211,10 @@
             const form = document.getElementById('conviteForm');
             const formData = new FormData(form);
             const mensagemDiv = document.getElementById('mensagem');
+            const slider = document.getElementById('slider');
+
+            // Adiciona a classe mini-slide para mover o slide para o canto superior esquerdo
+            slider.classList.add('mini-slide');
 
             fetch('/responder', {
                 method: 'POST',
@@ -156,6 +231,5 @@
             });
         }
     </script>
-
 </body>
 </html>
