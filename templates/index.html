@@ -31,6 +31,7 @@
             width: 100%;
             gap: 20px;
             align-items: center;
+            flex-direction: row; /* Alteração para desktop */
         }
 
         /* Estilo do título */
@@ -51,7 +52,7 @@
             border-radius: 15px;
             position: relative;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: all 0.6s ease; /* Transição suave para a nova posição */
+            transition: all 0.6s ease;
         }
 
         .slider-images {
@@ -83,14 +84,14 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            width: 150px; /* Reduz tamanho do slide */
+            width: 150px;
             height: 250px;
-            z-index: 1000; /* Traz o slide para frente */
+            z-index: 1000;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Estilos para o formulário com detalhes de princesa */
+        /* Estilos para o formulário */
         #conviteForm {
             background-color: #ffffff;
             padding: 30px;
@@ -171,10 +172,49 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Responsividade */
+        /* Responsividade para dispositivos móveis */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Alinha em coluna no celular */
+                gap: 15px;
+            }
+
+            #slider {
+                max-width: 100%;
+                height: 300px; /* Ajusta altura para caber melhor na tela */
+            }
+
+            #conviteForm {
+                padding: 20px;
+            }
+
+            h1 { font-size: 1.8em; }
+        }
+
         @media (max-width: 480px) {
+            .container {
+                gap: 10px;
+            }
+
             h1 { font-size: 1.5em; }
-            #conviteForm { padding: 20px; }
+            
+            #slider {
+                height: 250px; /* Altura ainda menor para dispositivos pequenos */
+            }
+
+            .slider-images img {
+                height: 100%;
+                object-fit: contain; /* Para exibir melhor em telas pequenas */
+            }
+            
+            #conviteForm {
+                padding: 15px;
+                font-size: 0.9em; /* Ajusta o tamanho do texto */
+            }
+
+            label {
+                font-size: 1em;
+            }
         }
     </style>
 </head>
